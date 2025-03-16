@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace System.Reflection
 {
-    /// <summary>
-    /// DO NOT USE ATTRIBUTE.ISDEFINED. USE THIS.ISATTRIBUTEDEFINED.  .ISDEFINED MIGHT WORK TOO
-    /// </summary>
     public class VariableInfo : MemberInfo
     {
         private InfoParent variable;
@@ -92,7 +89,7 @@ namespace System.Reflection
         ///                           {
         ///                               PropertyInfo pi = (PropertyInfo)vari;
         ///                           }
-        /// doesnt work for vari as PropertyInfo pi though :(
+        /// doesnt work for "vari as PropertyInfo pi" though :(
         /// </summary>
         /// <param name="a"></param>
         public static explicit operator PropertyInfo(VariableInfo a)
