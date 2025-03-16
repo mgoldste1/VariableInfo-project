@@ -42,10 +42,8 @@ namespace VInfoExample
 
             try
             {
-                //inside Attribute.IsDefined it casts the inputted object (my variableinfo) to a property info, just like the above line.
-                //it fails --- System.InvalidCastException: 'Unable to cast object of type 'System.Reflection.VariableInfo' to type 'System.Reflection.PropertyInfo'.'
-                //dont use this :(
-                bool fails1 = Attribute.IsDefined(p_vi, typeof(AlternativeNamesAttribute));
+                
+                bool usedToFailThankYouStackOverflow = Attribute.IsDefined(p_vi, typeof(AlternativeNamesAttribute));
             }
             catch { }
             

@@ -38,7 +38,7 @@ namespace System.Reflection
             T result = (T)generic.Invoke(variable, input);
             return result;
         }
-        public override MemberTypes MemberType => variable.MemberType;
+        public override MemberTypes MemberType => MemberTypes.Custom;
 
         public override string Name => variable.Name;
 
