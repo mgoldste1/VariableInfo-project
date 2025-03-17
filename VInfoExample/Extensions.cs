@@ -10,20 +10,56 @@ namespace System.Reflection
 {
     public static class Extensions
     {
-        public static List<VariableInfo> GetAllVariables(this Type type, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static List<VariableInfo_CUSTOM> GetAllVariables_CUSTOM(this Type type, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
         {
             var props = type.GetProperties(flags);
             //backing fields are the private fields properties create behind the scenes. we dont want them here.
             var fields = type.GetFields(flags).Where(o => !o.Name.ToUpper().Contains("__BACKINGFIELD")).ToArray();
-            List<VariableInfo> vars = new List<VariableInfo>();
+            List<VariableInfo_CUSTOM> vars = new List<VariableInfo_CUSTOM>();
             if (props.Length > 0)
-                vars.AddRange(props.Select(o => new VariableInfo(o)).ToList());
+                vars.AddRange(props.Select(o => new VariableInfo_CUSTOM(o)).ToList());
             if (fields.Length > 0)
-                vars.AddRange(fields.Select(o => new VariableInfo(o)).ToList());
+                vars.AddRange(fields.Select(o => new VariableInfo_CUSTOM(o)).ToList());
 
             if (type.BaseType != null)
-                vars.AddRange(GetAllVariables(type.BaseType, flags));
+                vars.AddRange(GetAllVariables_CUSTOM(type.BaseType, flags));
+            //vars = vars.Distinct().ToList();
+
+            return vars;
+        }
+        public static List<VariableInfo_PASSTHROUGH> GetAllVariables_PASSTHROUGH(this Type type, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        {
+            var props = type.GetProperties(flags);
+            //backing fields are the private fields properties create behind the scenes. we dont want them here.
+            var fields = type.GetFields(flags).Where(o => !o.Name.ToUpper().Contains("__BACKINGFIELD")).ToArray();
+            List<VariableInfo_PASSTHROUGH> vars = new List<VariableInfo_PASSTHROUGH>();
+            if (props.Length > 0)
+                vars.AddRange(props.Select(o => new VariableInfo_PASSTHROUGH(o)).ToList());
+            if (fields.Length > 0)
+                vars.AddRange(fields.Select(o => new VariableInfo_PASSTHROUGH(o)).ToList());
+
+            if (type.BaseType != null)
+                vars.AddRange(GetAllVariables_PASSTHROUGH(type.BaseType, flags));
+            //vars = vars.Distinct().ToList();
+
+            return vars;
+        }
+
+        public static List<VariableInfo_CUSTOM> GetAllVariables_ORIGINAL(this Type type, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        {
+            var props = type.GetProperties(flags);
+            //backing fields are the private fields properties create behind the scenes. we dont want them here.
+            var fields = type.GetFields(flags).Where(o => !o.Name.ToUpper().Contains("__BACKINGFIELD")).ToArray();
+            List<VariableInfo_CUSTOM> vars = new List<VariableInfo_CUSTOM>();
+            if (props.Length > 0)
+                vars.AddRange(props.Select(o => new VariableInfo_CUSTOM(o)).ToList());
+            if (fields.Length > 0)
+                vars.AddRange(fields.Select(o => new VariableInfo_CUSTOM(o)).ToList());
+
+            if (type.BaseType != null)
+                vars.AddRange(GetAllVariables_ORIGINAL(type.BaseType, flags));
             vars = vars.Distinct().ToList();
+
             return vars;
         }
         public static void SaveToVar(this object Obj, string VariableName, object VariableValue)
@@ -33,7 +69,7 @@ namespace System.Reflection
                 throw new Exception("SaveToVar only works on classes");
 
             //changed to use the variable stategy pattern and reused the method below this one.
-            var vars = t.GetAllVariables(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var vars = t.GetAllVariables_CUSTOM(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             var ourVar = vars.Where(o => o.Name.ToUpper() == VariableName.ToUpper()).SingleOrDefault();
 
             if (ourVar == null)
@@ -62,7 +98,7 @@ namespace System.Reflection
             return;
         }
 
-        public static void SaveToVar(this object Obj, VariableInfo VI, object VariableValue)
+        public static void SaveToVar(this object Obj, VariableInfo_CUSTOM VI, object VariableValue)
         {
             Type t = Obj.GetType();
             if (!t.IsClass)

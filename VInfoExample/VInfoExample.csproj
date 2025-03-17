@@ -49,7 +49,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VarInfoStrategy\VariableField.cs" />
-    <Compile Include="VarInfoStrategy\VariableInfo.cs" />
+    <Compile Include="VarInfoStrategy\VariableInfo_PASSTHROUGH.cs" />
+    <Compile Include="VarInfoStrategy\VariableInfo_CUSTOM.cs" />
     <Compile Include="VarInfoStrategy\VariableProperty.cs" />
   </ItemGroup>
   <ItemGroup>
