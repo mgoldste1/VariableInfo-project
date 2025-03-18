@@ -141,7 +141,7 @@ namespace System.Reflection
         {
             if (other == null)
                 return false;
-            if (variable.MemberType != other.MemberType)
+            if (variable.MemberType != other.variable.MemberType)
                 return false;
             //both are either fields or properties now.
             if (variable.mi.Name == other.variable.mi.Name && variable.mi.DeclaringType == other.variable.mi.DeclaringType)

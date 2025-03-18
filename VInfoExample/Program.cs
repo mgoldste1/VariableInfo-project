@@ -25,38 +25,18 @@ namespace VInfoExample
         Program()
         {
 
-            DistinctBroken();
+            ExampleCode();
 
         }
+        //test classes to play with
         public class A { public string s1,s2,s3;  }
-        public class B : A { public string s4; }
+        public class B : A { public string s4; private string ThisWouldBeLeftOutIfWeDidntIterateUpTheBaseTypes; private string ThisWouldAlsoBeLeftOutIfWeDidntIterateUpTheBaseTypes { get; set; } }
         public class C : B { public string s5; }
-        public void DistinctBroken()
-        {
-            C childClass = new C();
 
-            //i commented out the distinct in this get all variables so you can see it here.
-            var ourVars_CUSTOM = childClass.GetType().GetAllVariables_CUSTOM();
-            string varsInit = string.Join(",", ourVars_CUSTOM.Select(o => o.Name).OrderBy(o=>o));
-
-            var distinctVars_CUSTOM = ourVars_CUSTOM.Distinct().ToList();
-            string varsAfterDistinct_CUSTOM = string.Join(",", distinctVars_CUSTOM.Select(o => o.Name).OrderBy(o => o));
-
-
-            var ourVars_PASSTHROUGH = childClass.GetType().GetAllVariables_PASSTHROUGH();
-            string varsInit_PASSTHROUGH = string.Join(",", ourVars_PASSTHROUGH.Select(o => o.Name).OrderBy(o => o));
-
-            var distinctVars_PASSTHROUGH = ourVars_PASSTHROUGH.Distinct().ToList();
-            string varsAfterDistinct_PASSTHROUGH = string.Join(",", distinctVars_PASSTHROUGH.Select(o => o.Name).OrderBy(o => o));
-
-            if (varsAfterDistinct_CUSTOM != varsAfterDistinct_PASSTHROUGH)
-                throw new Exception("i am so very confused");
-
-        }
         public void ExampleCode()
         {
-            VariableInfo_CUSTOM p_vi = new VariableInfo_CUSTOM(this.GetType().GetProperty("property"));
-            VariableInfo_CUSTOM f_vi = new VariableInfo_CUSTOM(this.GetType().GetField("field"));
+            VariableInfo p_vi = new VariableInfo(this.GetType().GetProperty("property"));
+            VariableInfo f_vi = new VariableInfo(this.GetType().GetField("field"));
             bool works1 = p_vi.IsDefined(typeof(AlternativeNamesAttribute));
             bool works2 = f_vi.IsDefined(typeof(AlternativeNamesAttribute));
             bool works3 = p_vi.IsAttributeDefined(typeof(AlternativeNamesAttribute));
@@ -68,8 +48,8 @@ namespace VInfoExample
             FieldInfo asFieldInfo = (FieldInfo)f_vi;
 
             //also works
-            VariableInfo_CUSTOM propBackToVarInfo = (VariableInfo_CUSTOM)asPropInfo;
-            VariableInfo_CUSTOM fieldBackToVarInfo = (VariableInfo_CUSTOM)asFieldInfo;
+            VariableInfo propBackToVarInfo = (VariableInfo)asPropInfo;
+            VariableInfo fieldBackToVarInfo = (VariableInfo)asFieldInfo;
 
             try
             {
@@ -78,7 +58,7 @@ namespace VInfoExample
             }
             catch { }
 
-            foreach (var v in this.GetType().GetAllVariables_CUSTOM())
+            foreach (var v in this.GetType().GetAllVariables())
             {
                 if (v.Name == "Aardvark")
                     this.SaveToVar(v, "ants");
@@ -94,6 +74,5 @@ namespace VInfoExample
             if (field != "mouse")
                 throw new Exception("i am a terrible programmer");
         }
-    }
-   
+    }   
 }
